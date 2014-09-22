@@ -13,7 +13,7 @@ require_once ("core.php");
  */
 class Route 
 {
-    private static $OBJ;
+    private static $obj;
     private $paramArray;
     private $paramType;
 
@@ -52,10 +52,10 @@ class Route
     
     public static function init()
     {
-        if ( empty ( self::$OBJ )) {
-			self::$OBJ = new Route();
+        if ( empty ( self::$obj )) {
+			self::$obj = new Route();
 		}
-		return self::$OBJ; 
+		return self::$obj; 
     }
     
     public function run()
@@ -149,7 +149,7 @@ class Route
 
 class Authorization 
 {
-    private static $OBJ;
+    private static $obj;
     private $cookieName = 'auth';
     private $authName = 'authorization';
     private $paramArray;
@@ -194,10 +194,10 @@ class Authorization
     
     public static function init()
     {
-        if ( empty ( self::$OBJ )) {
-			self::$OBJ = new Authorization();
+        if ( empty ( self::$obj )) {
+			self::$obj = new Authorization();
 		}
-		return self::$OBJ; 
+		return self::$obj; 
     }
     
     public function isAuth ()

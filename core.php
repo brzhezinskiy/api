@@ -57,42 +57,26 @@ class UserModel
 	 */
     public function selectUsers(array $filter = array(), $orCond = false)
     {
-        $retArray = array();
-        $sqlStr = "SELECT * FROM " . $this->dbStruct['table'];
-        $condStr = "";
-        
-        // экранируем - необходимо, т.к. запрос сборный и мы не сможем использовать paramValue PDO
-        $filter = $this->addslashesIt($filter);
-        
-        foreach ($filter as $name => $val) {
-            $val = addslashes($val);                
+        $sql = new RequestBuilder($this->dbInctance);
+        $sql->select('*')->from('^table', array('^table' => $this->dbStruct['table']));
+         
+        foreach ($filter as $name => $val) {             
+            // проверяем, как будет составляться условие - AND или OR
+            $orCond?$sql->or_():$sql->and_();
+            
             if (strpos($val, '*') !== false) {      // найдены условия, нужен LIKE
                 $val = str_replace('*', '%', $val);
-                $val = $name . ' LIKE ' . "'" . $val . "'";
+                $sql->where('^name', array('^name' => $name))
+                    ->like(':val', array(':val' => $val));
+                
             } else {                                // * нет, нужно сравнение
-                $val = $name . ' = ' . "'" . $val . "'";
-            }
-            
-            if (!strlen($condStr)) {   // условия пустые
-                $condStr = $val;
-            } else {                   // есть условия
-                $condStr .= $orCond?' OR ':' AND ';
-                $condStr .= $val;
+                $sql->where('^name = :val', array('^name' => $name, ':val' => $val));
             }
         }
         
-        if (strlen($condStr)) { // есть условия для WHERE
-            $sqlStr .= ' WHERE ' . $condStr;
-        }
-        
-        $sth = $this->dbInctance->query($sqlStr);
+        $sth = $sql->query();
         $sth->setFetchMode(PDO::FETCH_ASSOC);
-        
-        if ($rows = $sth->fetchAll()) {
-            $retArray = $rows;
-        }
-        
-        return new SelectUsers($retArray);
+        return new SelectUsers($sth->fetchAll());
     }
        
     /**
@@ -101,25 +85,14 @@ class UserModel
 	 */
     public function addUser(array $data)
     {
-        $retArray = array();
-        $sqlStr = "INSERT INTO " . $this->dbStruct['table'] . " (:col) VALUES (':val')";
         $requiredCol = $this->dbStruct['require'];
         $mustBeUnic = $this->dbStruct['unic'];
-        
-        // экранируем - необходимо, т.к. запрос сборный и мы не сможем использовать paramValue PDO
-        $data = $this->addslashesIt($data);
-        
+
         foreach ($requiredCol as $column) {
             if ( !array_key_exists($column, $data) || !strlen($data[$column])) {  // не найдено обязательное поле или оно пустое
                 throw new Exception ( "[" . __CLASS__ . "] Не указано обязательное поле " . $column . "!");
             }
         }
-        
-        $keys = implode(", ", array_keys($data));
-        $values = implode("', '", array_values($data));
-        $sqlStr = str_replace(':col', $keys, $sqlStr);
-        $sqlStr = str_replace(':val', $values, $sqlStr);
-            
 
         // проверяем уникальность данных, если задано
         if (count($mustBeUnic)) {
@@ -136,8 +109,13 @@ class UserModel
             }
         }
         
-        $sth = $this->dbInctance->query($sqlStr);
-		return new AddUser( array ('id' => $this->dbInctance->lastInsertId() ));
+        $sql = new RequestBuilder($this->dbInctance);
+        
+        $sql->insert('^table', array('^table' => $this->dbStruct['table']))
+            ->values($data)
+            ->query();
+            
+		return new AddUser( array ('id' => $sql->lastInsertId() ));
     }
     
     /**
@@ -145,28 +123,8 @@ class UserModel
 	 */
     public function updateUser($id, array $data)
     {
-        $retArray = array();
-        $sqlStr = "UPDATE " . $this->dbStruct['table'] . " SET ";
-        $condStr = "WHERE " . $this->dbStruct['id'] . " = " . $this->addslashesIt($id);
-        
         $mustBeUnic = $this->dbStruct['unic'];
         $cantBeChange = $this->dbStruct['nochange'];
-        
-        // экранируем - необходимо, т.к. запрос сборный и мы не сможем использовать paramValue PDO
-        $data = $this->addslashesIt($data);
-        
-        $setLine = "";
-            
-        foreach ($data as $key => $val) {
-            
-            if (strlen($setLine)) {   // еще одно поле
-                $setLine .= ", ";
-            }
-            $setLine .= $key . ' = ' .  "'" . $val . "'";
-        }
-           
-        $sqlStr .= $setLine . $condStr;
-        
         
         if (count($cantBeChange)) {
             foreach ($cantBeChange as $column) {
@@ -200,12 +158,13 @@ class UserModel
             }
         }
         
-        $sth = $this->dbInctance->query($sqlStr);
-        /* данные могут и не обновляться
-        if (!$sth->rowCount()) {
-            throw new Exception ("[" . __CLASS__ . "] Не удалось обновить данные!");
-        }
-        */
+        $sql = new RequestBuilder($this->dbInctance);
+        
+        $sql->update('^table', array('^table' => $this->dbStruct['table']))
+            ->set($data)
+            ->where('^id = :val', array('^id' => $this->dbStruct['id'], ':val' => $id))
+            ->query();
+
 		return new UpdateUser(array ('result' => true ));        
     }   
     
@@ -214,12 +173,13 @@ class UserModel
 	 */
     public function deleteUser($id)
     {
-        $retArray = array();
-        $sqlStr = "DELETE FROM " . $this->dbStruct['table'] . " WHERE " . $this->dbStruct['id'] . " = " . $this->addslashesIt($id);
+        $sql = new RequestBuilder($this->dbInctance);
         
-        $sth = $this->dbInctance->query($sqlStr);
+        $sql->delete()
+            ->from('^table', array('^table' => $this->dbStruct['table']))
+            ->where('^id = :val', array('^id' => $this->dbStruct['id'], ':val' => $id));
         
-		if (!$sth->rowCount()) {
+		if (!$sql->query()->rowCount()) {
             throw new Exception ("[" . __CLASS__ . "] Не удалось удалить запись! Возможно, она уже удалена.");
         }
 		return new DeleteUser(array ('result' => true ));              
@@ -229,11 +189,15 @@ class UserModel
 	 * Экранирует данные. Может принимать массив и строку
      * возвращает массив \ строку с экранированными данными
 	 */
-    private function addslashesIt($data)
+    private function quoteUnsaveData($data)
     {
         if (is_array($data)) {  // массив
             foreach ($data as $key => $val) {
-                $data[$key] = addslashes($val);  
+                if (is_array($val)) {
+                    $data[$key] = $this->quoteUnsaveData($val);
+                } else {
+                    $data[$key] = addslashes($val); 
+                }                
             }
         } else {                // строка
             $data = addslashes($data);

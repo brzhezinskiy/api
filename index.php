@@ -53,18 +53,18 @@ $_GET['id'] = '286';
 
 /* add test
 $_GET['action'] = 'add';
-$_GET['data'] = array('login'=>'test12');
+$_GET['data'] = array('login'=>'test1221');
 */
 
 /* update test
 $_GET['action'] = 'update';
-$_GET['id'] = '289';
+$_GET['id'] = '6';
 $_GET['data'] = array('nick'=>'test2222');
 */
 
 /* delete test
 $_GET['action'] = 'delete';
-$_GET['id'] = '289';
+$_GET['id'] = '7';
 */
 
 /* заглушка авторизации*/

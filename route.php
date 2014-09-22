@@ -95,7 +95,6 @@ class Route
         }
         
         // создаем экземпляр класса
-        //print_r ($param);
         try {
             $obj = new UserModel(DB::GetDBH());
             $userObject = call_user_func_array(array($obj, $metod), $param);

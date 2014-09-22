@@ -1,12 +1,14 @@
 <?php
 /**
  * Класс модели работы с БД
+ * По хорошему параметры подключения нужно вынести в конфиг,
+ * но сейчас это лишние сущности
 */
 class DB 
 {
 	private $host = "localhost";
 	private $dbname = "users";
-	private $user = "root";
+	private $user = "";
 	private $pass = "";	
 	
 	private static $DBH;

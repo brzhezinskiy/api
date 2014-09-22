@@ -201,9 +201,11 @@ class UserModel
         }
         
         $sth = $this->dbInctance->query($sqlStr);
+        /* данные могут и не обновляться
         if (!$sth->rowCount()) {
             throw new Exception ("[" . __CLASS__ . "] Не удалось обновить данные!");
         }
+        */
 		return new UpdateUser(array ('result' => true ));        
     }   
     

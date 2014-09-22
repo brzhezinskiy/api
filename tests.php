@@ -18,7 +18,7 @@ try {
     //print_r ( $objUser->selectUserByID('30')->toArray() );
 
     // получаем структуру таблицы пользователей, для определения ID и доступных полей
-    $arr = $objUser->getTableStructure();
+    $arr = $objUser->getTableStructure()->toArray();
     echo '<br>' . "Структура таблицы" . '<br>';
     print_r ($arr);
     echo '<br>';
@@ -36,7 +36,7 @@ try {
         echo $e->getMessage() . '<br>'; 
     }
     
-    
+     
     echo '<br>' . "тест получения списка пользователей" . '<br>';
     try {
         foreach($objUser->selectUsers()->toArray() as $userArray) {
@@ -78,7 +78,7 @@ try {
         echo $e->getMessage() . '<br>'; 
     }
     
-    /*
+   /*
     echo '<br>' . "тест удаления пользователей" . '<br>';
     try {
         foreach($objUser->selectUsers()->toArray() as $userArray) {

@@ -75,6 +75,7 @@ class SelectUserByID extends DefaultFormatter
 {  
     public function toHTML()
     {
+        Header("Content-Type: text/html;charset=UTF-8");
         $ret = '<table>';
         $ret .= '<tr>';
         foreach ($this->data as $item) {
@@ -91,6 +92,7 @@ class SelectUsers extends DefaultFormatter
 { 
     public function toHTML()
     {
+        Header("Content-Type: text/html;charset=UTF-8");
         $ret = '<table>';
         foreach ($this->data as $val) {
             $ret .= '<tr>';

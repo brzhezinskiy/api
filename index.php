@@ -67,7 +67,9 @@ $_GET['action'] = 'delete';
 $_GET['id'] = '289';
 */
 
+/* заглушка авторизации*/
 $_GET['authorization'] = array('login'=>'test', 'pass'=>'test');
+$_POST['authorization'] = array('login'=>'test', 'pass'=>'test');
 
 try {
     Route::init()->run();

@@ -8,8 +8,8 @@ class DB
 {
 	private $host = "localhost";
 	private $dbname = "users";
-	private $user = "ivanicin.ev";
-	private $pass = "zFn3mw9i8";	
+	private $user = "";
+	private $pass = "";	
 	
 	private static $DBH;
 	

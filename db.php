@@ -8,8 +8,8 @@ class DB
 {
 	private $host = "localhost";
 	private $dbname = "users";
-	private $user = "";
-	private $pass = "";	
+	private $user = "ivanicin.ev";
+	private $pass = "zFn3mw9i8";	
 	
 	private static $DBH;
 	
@@ -161,7 +161,7 @@ class RequestBuilder
     {
         if (count($ph)) {
             foreach ($ph as $key => $val) {
-                if ($key[0] == ':') { // это значение
+                if (mb_substr($key, 0, 1) == ':') { // это значение
                     $val = $this->instance->quote($val);
                 } else {              // это поле
                     $val = addslashes($val);

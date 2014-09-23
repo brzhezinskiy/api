@@ -89,7 +89,7 @@ class UserModel
         $mustBeUnic = $this->dbStruct['unic'];
 
         foreach ($requiredCol as $column) {
-            if ( !array_key_exists($column, $data) || !strlen($data[$column])) {  // не найдено обязательное поле или оно пустое
+            if ( !array_key_exists($column, $data) || !mb_strlen($data[$column])) {  // не найдено обязательное поле или оно пустое
                 throw new Exception ( "[" . __CLASS__ . "] Не указано обязательное поле " . $column . "!");
             }
         }
@@ -99,7 +99,7 @@ class UserModel
             $filter = array();
             
             foreach ($mustBeUnic as $column) {
-                if (array_key_exists($column, $data) && strlen($data[$column])) {  
+                if (array_key_exists($column, $data) && mb_strlen($data[$column])) {  
                     $filter[$column] = $data[$column];
                 }
             }
@@ -139,7 +139,7 @@ class UserModel
             $filter = array();
             
             foreach ($mustBeUnic as $column) {
-                if (array_key_exists($column, $data) && strlen($data[$column])) {  // существует и не пустой (пустое поле мб не уникальным)
+                if (array_key_exists($column, $data) && mb_strlen($data[$column])) {  // существует и не пустой (пустое поле мб не уникальным)
                     $filter[$column] = $data[$column];
                 }
             }

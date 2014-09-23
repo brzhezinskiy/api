@@ -40,6 +40,11 @@ class Route
                                               'param' => array ('id') 
                                             )
                          ); 
+                         
+    private $httpError = array(
+       404 => '404 Не найдено - Запрашиваемая страница не найдена на сервере.',
+       500 => '500 Внутренняя ошибка сервера - Запрос не может быть обработан из-за внутренней ошибки сервера.'
+    );
     
     private function __construct () 
     {
@@ -61,6 +66,12 @@ class Route
     
     public function run()
     {
+        // проверяем ридирект с ошибки
+        $rdStatus = isset($_SERVER['REDIRECT_STATUS'])?$_SERVER['REDIRECT_STATUS']:0;
+        if (array_key_exists($rdStatus, $this->httpError)) {
+            $this->makeError("[" . __CLASS__ . "] " . $this->httpError[$rdStatus] );
+        }
+        
         // проверяем авторизацию
         if (!Authorization::init()->isAuth()) {
             $this->makeError("[" . __CLASS__ . "] API доступно только авторизованным пользователям!");

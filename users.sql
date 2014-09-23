@@ -21,6 +21,19 @@ SET time_zone = "+00:00";
 --
 
 -- --------------------------------------------------------
+--
+-- Структура таблицы `admins`
+--
+CREATE TABLE IF NOT EXISTS `admins` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `username` varchar(100) NOT NULL,
+  `password` varchar(100) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+INSERT INTO `admins` (`id`, `username`, `password`) VALUES
+(1,	'admin',	'$2a$13$5oIHDQkY3zYqVJvQkKYKC.QlA0omEQsO.9VZnmqPhgiqGiCCqjLBu');
+
 
 --
 -- Структура таблицы `users`
@@ -32,7 +45,7 @@ CREATE TABLE IF NOT EXISTS `users` (
   `nick` varchar(100) NOT NULL,
   `email` varchar(100) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8mb4 AUTO_INCREMENT=21 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=21 ;
 
 --
 -- Дамп данных таблицы `users`

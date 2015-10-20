@@ -5,6 +5,7 @@
  * Автор: freecod@mail.ru
 */
 
+require_once ("auth.php");
 require_once ("core.php");
 
 /**
@@ -24,7 +25,7 @@ class Route
                                               'param' => array () 
                                             ),
                            'get'    => array( 'metod' => 'selectUsers',
-                                              'param' => array ('login', 'nick', 'email') 
+                                              'param' => array ('id', 'login', 'nick', 'email') 
                                             ),
                            'getbyid'=> array( 'metod' => 'selectUserByID',
                                               'param' => array ('id') 
@@ -73,7 +74,7 @@ class Route
         
         // проверяем авторизацию
         if (!Authorization::init()->isAuth()) {
-			header('Location: http://'.$_SERVER["SERVER_NAME"].$_SERVER["REQUEST_URI"]);
+            $this->makeError("[" . __CLASS__ . "] API доступно только авторизованным пользователям!");
         }
         
         $action = $this->getParam($this->actionName);

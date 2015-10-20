@@ -1,7 +1,2 @@
-AddType "text/html; charset=utf-8" .html .htm .shtml
-Options -Indexes
-ErrorDocument 500 . 
 ErrorDocument 404 .
-ErrorDocument 403 .
-ErrorDocument 401 .
-ErrorDocument 400 .
+ErrorDocument 500 .

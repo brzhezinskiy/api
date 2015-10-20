@@ -1,0 +1,60 @@
+.block {
+    display: block;
+    width: 40%;
+    margin: 1em;
+    padding: 1em;
+    float:left;
+}
+.message {
+    .block;
+    border: 1px solid #ddd;
+}
+.error {
+    color: #500;
+    background-color: #fdc;
+}
+form{
+    .block;
+    label {
+        clear:right;
+        display: block;
+        margin: .5em;
+        &.radio {
+            &.format, &.method{
+                width: 20%;
+                float: left;
+            }
+            padding: 1em;
+            background-color: #eee;
+            &:hover {
+                background-color: #ddd;
+                cursor: pointer;
+            }
+            &.selected {
+                background-color: #ccc;
+            }
+        }
+        span {
+            display: inline-block;
+            width: 15%;
+        }
+        input[type=radio] {
+            width: 0px;
+            height: 0px;
+            margin: 0px;
+        }
+        input[type=text], input[type=password] {
+            padding: .5em;
+            width: 80%;
+        }
+    }
+    input[type=button] {
+        margin: 1em;
+        padding:.5em 2em;
+        float: right;
+        
+    }
+    hr {
+        clear: both;
+    }
+}

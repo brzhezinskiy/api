@@ -55,7 +55,7 @@ class UserModel
 	 * получает список пользователей с учетом $filter, с условием LIKE % если в поле указана *.
      * если указано orCond = true, ищет по условию OR
 	 */
-    public function selectUsers(array $filter = array(), $orCond = false)
+    public function selectUsers(array $filter = array(), $orCond = true)
     {
         $sql = new RequestBuilder($this->dbInctance);
         $sql->select('*')->from('^table', array('^table' => $this->dbStruct['table']));

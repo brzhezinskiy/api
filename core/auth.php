@@ -1,7 +1,7 @@
 <?php
 /**
- *  ласс авторизации, провер€ет наличие куки, производит аутентификацию
- * возвращает true \ false
+ * Класс авторизации, проверяет наличие кукиает true \ false, производит аутентификацию
+ * возвращ
  */
 
 class Authorization 
@@ -37,7 +37,8 @@ class Authorization
                 if ($login == $this->login && $pass == $this->pass)
                 {
                     setcookie ($this->cookieName, md5($pass), time() + 3600);
-                    $this->isAuth = true;
+					header('Location: http://'.$_SERVER["SERVER_NAME"].$_SERVER["REQUEST_URI"]);
+					exit;
                 }
             }
         } else {
